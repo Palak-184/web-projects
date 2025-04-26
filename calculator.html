@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Calculator</title>
+<style>
+body{
+background:linear-gradient(to top,lightgreen,yellow);
+display:flex;
+justify-content: center;
+align-items: center;
+min-height:100vh;
+margin:0;
+font-family:sans-serif;
+}
+.calculator-container{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+.calculator{
+background-color:#f0f0f0;
+border-radius:15px;
+box-shadow:0 8px 16px rgba(0, 0, 0, 0.2);
+width:300px;
+padding:20px;
+}
+#display{
+width:95%;
+margin-bottom:10px;
+padding:15px;
+font-size:24px;
+text-align:right;
+border:1px solid #ddd;
+border-radius:8px;
+background-color:#fff;
+
+}
+
+.buttons{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+grid-gap:5px;
+}
+.buttons button{
+padding:20px;
+font-size:20px;
+border:none;
+border-radius:8px;
+background-color:#e0e0e0;
+cursor:pointer;
+transition:background-color 0.3s ease;
+}
+.buttons button:hover{
+background-color:yellow;
+}
+.buttons button:active{
+background-color:lightblue;
+}
+.calculator:hover{
+transform:scale(1.2,0.9);
+background-color:pink;
+border:2px solid blue;
+}
+.calculator-container:hover{
+transform:scale(1,1.2);
+color:red;
+font-weight:900;
+text-shadow:1px 2px 2px lightblue; 
+}
+</style>
+</head>
+<body>
+<div class="calculator-container">
+<h1>CALCULATOR</h1>
+<p><h2>How to use:</h2><br><h2>Enter the first number , click an operator(+ ,- ,* ,/ ) , enter the second number , and click=. and  clear with C. example: 5 + 2 = 7;</h2></p>
+
+<div class="calculator">
+<input type="text" id="display" disabled>
+<div class="buttons">
+<button>7</button>
+<button>8</button>
+<button>9</button>
+<button>+</button>
+<button>4</button>
+<button>5</button>
+<button>6</button>
+<button>-</button>
+<button>1</button>
+<button>2</button>
+<button>3</button>
+<button>*</button>
+<button>C</button>
+<button>0</button>
+<button>=</button>
+<button>/</button>
+</div>
+</div>
+</div>
+<script>
+const display=document.getElementById('display');
+const buttons=document.querySelectorAll('.buttons button');
+let currentInput = '';
+let operator = '';
+let firstOperand = null;
+buttons.forEach(button =>{
+button.addEventListener('click', () =>{
+const value = button.textContent;
+
+if (value>= '0'  &&  value<= '9' || value === '.')
+{
+currentInput += value;
+display.value = currentInput;
+}
+else if (value === 'C')
+{
+currentInput = '';
+operator = '';
+firstOperand = null;
+display.value = '';
+}
+else if(value === '+' || value === '-' || value === '*' || value ==='/')
+{
+  if(currentInput !== '')
+  {
+   if(firstOperand === null)
+   {
+   firstOperand = parseFloat(currentInput);
+    }
+   else{
+    const secondOperand = parseFloat(currentInput);
+     let result;
+     switch (operator)
+{
+ case '+' :
+	result = firstOperand + secondOperand;
+	break;
+case '-' :
+	result = firstOperand - secondOperand;
+	break;
+case '*' :
+	result = firstOperand  * secondOperand;
+	break;
+case '/' :
+	if(secondOperand === 0)
+	{
+	 display.value = 'Error';
+	 return;
+	}
+                  result = firstOperand / secondOperand;
+	break;
+}
+firstOperand = result;
+display.value = result;
+}
+operator = value;
+currentInput = '';
+}
+else if(firstOperand == null && display.value !== '')
+{
+firstOperand = parseFloat(display.value);
+operator = value;
+}
+else if (firstOperand !== null)
+{
+ operator = value;
+}
+}
+
+else if (value === '=')
+{
+if (firstOperand !== null && currentInput !== ""){
+const  secondOperand = parseFloat(currentInput);
+let result;
+ switch (operator)
+{
+ case '+' :
+	result = firstOperand + secondOperand;
+	break;
+case '-' :
+	result = firstOperand - secondOperand;
+	break;
+case '*' :
+	result = firstOperand  * secondOperand;
+	break;
+case '/' :
+	if(secondOperand === 0)
+	{
+	 display.value = 'Error';
+	 return;
+	}
+                  result = firstOperand / secondOperand;
+	break;
+}
+display.value =  result;
+currentInput = result.toString();
+firstOperand = null;
+operator = '';
+}
+}
+});
+});
+</script>
+</body>
+</html>
